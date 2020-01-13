@@ -26,7 +26,7 @@
                     "description": "",
                     "settings": {
                         "tcmConnection": {
-                            "id": "de0b6eb0-2d56-11ea-83d0-7da45e76b8ef",
+                            "id": "4ce6b3a0-33e0-11ea-83d0-7da45e76b8ef",
                             "type": "flogo:connector",
                             "version": "1.1.1",
                             "name": "tibco-eftl",
@@ -46,7 +46,7 @@
                                         "name": "Connection Name",
                                         "description": "Name of the connection"
                                     },
-                                    "value": "MM-TCE"
+                                    "value": "TCM"
                                 },
                                 {
                                     "name": "description",
@@ -66,7 +66,7 @@
                                         "description": "TIBCO Cloud Messaging connection url",
                                         "appPropertySupport": true
                                     },
-                                    "value": "=$property[\"Messaging.MM-TCE.Connection_URL\"]"
+                                    "value": "=$property[\"Messaging.TCM.Connection_URL\"]"
                                 },
                                 {
                                     "name": "authKey",
@@ -78,7 +78,7 @@
                                         "type": "password",
                                         "appPropertySupport": true
                                     },
-                                    "value": "=$property[\"Messaging.MM-TCE.Authentication_Key\"]"
+                                    "value": "=$property[\"Messaging.TCM.Authentication_Key\"]"
                                 },
                                 {
                                     "name": "timeout",
@@ -89,7 +89,7 @@
                                         "description": "Timeout value in seconds",
                                         "appPropertySupport": true
                                     },
-                                    "value": "=$property[\"Messaging.MM-TCE.Timeout_(in_seconds)\"]"
+                                    "value": "=$property[\"Messaging.TCM.Timeout_(in_seconds)\"]"
                                 },
                                 {
                                     "name": "autoReconnectAttempts",
@@ -100,7 +100,7 @@
                                         "description": "Specifies the number of times the client attempts to automatically reconnect to the server following a loss of connection",
                                         "appPropertySupport": true
                                     },
-                                    "value": "=$property[\"Messaging.MM-TCE.AutoReconnectAttempts\"]"
+                                    "value": "=$property[\"Messaging.TCM.AutoReconnectAttempts\"]"
                                 },
                                 {
                                     "name": "autoReconnectMaxDelay",
@@ -111,7 +111,7 @@
                                         "description": "Determines the maximum delay between autoreconnect attempts",
                                         "appPropertySupport": true
                                     },
-                                    "value": "=$property[\"Messaging.MM-TCE.AutoReconnectMaxDelay_(in_seconds)\"]"
+                                    "value": "=$property[\"Messaging.TCM.AutoReconnectMaxDelay_(in_seconds)\"]"
                                 }
                             ],
                             "outputs": [],
@@ -146,9 +146,11 @@
                             "keyfield": "name",
                             "iteratorAccumulate": false,
                             "isValid": true,
-                            "lastUpdatedTime": 1577966221916,
-                            "user": "kys473iplvpnc5o5y4po5n7ad6zz6nln",
-                            "connectorName": "MM-TCE",
+                            "lastUpdatedTime": 1578684904410,
+                            "createdTime": 1578684904410,
+                            "user": "o4yg65xtp5plekzl4fwhaqvhbv2coekh",
+                            "subscriptionId": "01DXXG1Y0P5RPVB4ZYJH69D05B",
+                            "connectorName": "TCM",
                             "connectorDescription": " "
                         },
                         "durableSub": false,
@@ -160,7 +162,7 @@
                     "action": {
                         "ref": "github.com/project-flogo/flow",
                         "settings": {
-                            "flowURI": "res://flow:ExecuteDeliveryFlow"
+                            "flowURI": "res://flow:DeliverOrderFlow"
                         },
                         "input": {
                             "message": {
@@ -175,7 +177,7 @@
                             "message": {
                                 "type": "json",
                                 "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"properties\":{\"payload\":{\"type\":\"string\"}}}",
-                                "fe_metadata": "{\n    \"payload\":\"\"\n}"
+                                "fe_metadata": "{\n    \"payload\": \"\"\n}"
                             }
                         }
                     }
@@ -185,14 +187,14 @@
     ],
     "resources": [
         {
-            "id": "flow:ExecuteDeliveryFlow",
+            "id": "flow:DeliverOrderFlow",
             "data": {
-                "name": "ExecuteDeliveryFlow",
+                "name": "DeliverOrderFlow",
                 "description": "",
                 "links": [
                     {
                         "id": 1,
-                        "from": "LogInbound",
+                        "from": "LogInboundMessage",
                         "to": "ParsePayload",
                         "type": "default"
                     },
@@ -205,20 +207,14 @@
                     {
                         "id": 3,
                         "from": "MapperStringify",
-                        "to": "LogOutbound",
-                        "type": "default"
-                    },
-                    {
-                        "id": 4,
-                        "from": "LogOutbound",
                         "to": "TCMMessagePublisher",
                         "type": "default"
                     }
                 ],
                 "tasks": [
                     {
-                        "id": "LogInbound",
-                        "name": "LogInbound",
+                        "id": "LogInboundMessage",
+                        "name": "LogInboundMessage",
                         "description": "Simple Log Message Activity",
                         "activity": {
                             "ref": "#log",
@@ -244,7 +240,7 @@
                                     "jsonObject": {
                                         "type": "json",
                                         "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"properties\":{\"payload\":{\"type\":\"object\",\"properties\":{\"order_id\":{\"type\":\"string\"},\"customer_id\":{\"type\":\"string\"},\"email\":{\"type\":\"string\"},\"ShippingAddress\":{\"type\":\"object\",\"properties\":{\"address1\":{\"type\":\"string\"},\"address2\":{\"type\":\"string\"},\"city\":{\"type\":\"string\"},\"country\":{\"type\":\"string\"},\"postcode\":{\"type\":\"string\"}}}}}}}",
-                                        "fe_metadata": "{\n  \"payload\" : {\n    \"order_id\" : \"000000109\",\n    \"customer_id\" : \"abc123\",\n    \"email\" : \"bob.sugar@example.com\",\n    \"ShippingAddress\" : {\n      \"address1\" : \"Flat 4\",\n      \"address2\" : \"103 Royal Oak Road\",\n      \"city\" : \"Warwick\",\n      \"country\" : \"United Kingdom\",\n      \"postcode\" : \"CV4 7ES\"\n    }\n  }\n}"
+                                        "fe_metadata": "{\n  \"payload\" : {\n    \"order_id\" : \"\",\n    \"customer_id\" : \"\",\n    \"email\" : \"\",\n    \"ShippingAddress\" : {\n      \"address1\" : \"\",\n      \"address2\" : \"\",\n      \"city\" : \"\",\n      \"country\" : \"\",\n      \"postcode\" : \"\"\n    }\n  }\n}"
                                     }
                                 }
                             }
@@ -268,7 +264,7 @@
                                     "input": {
                                         "type": "json",
                                         "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"properties\":{\"stringify\":{\"type\":\"string\"}}}",
-                                        "fe_metadata": "{\n    \"stringify\":\"\"\n}"
+                                        "fe_metadata": "{\n\t\"stringify\":\"\"\n}"
                                     }
                                 },
                                 "output": {
@@ -278,19 +274,6 @@
                                         "fe_metadata": "{\n  \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"stringify\": {\n      \"type\": \"string\"\n    }\n  }\n}"
                                     }
                                 }
-                            }
-                        }
-                    },
-                    {
-                        "id": "LogOutbound",
-                        "name": "LogOutbound",
-                        "description": "Simple Log Message Activity",
-                        "activity": {
-                            "ref": "#log",
-                            "input": {
-                                "Log Level": "INFO",
-                                "flowInfo": false,
-                                "message": "=$activity[MapperStringify].output.stringify"
                             }
                         }
                     },
@@ -308,7 +291,7 @@
                             "ref": "#tcmpublisher",
                             "input": {
                                 "tcmConnection": {
-                                    "id": "de0b6eb0-2d56-11ea-83d0-7da45e76b8ef",
+                                    "id": "4ce6b3a0-33e0-11ea-83d0-7da45e76b8ef",
                                     "type": "flogo:connector",
                                     "version": "1.1.1",
                                     "name": "tibco-eftl",
@@ -328,7 +311,7 @@
                                                 "name": "Connection Name",
                                                 "description": "Name of the connection"
                                             },
-                                            "value": "MM-TCE"
+                                            "value": "TCM"
                                         },
                                         {
                                             "name": "description",
@@ -348,7 +331,7 @@
                                                 "description": "TIBCO Cloud Messaging connection url",
                                                 "appPropertySupport": true
                                             },
-                                            "value": "=$property[\"Messaging.MM-TCE.Connection_URL\"]"
+                                            "value": "=$property[\"Messaging.TCM.Connection_URL\"]"
                                         },
                                         {
                                             "name": "authKey",
@@ -360,7 +343,7 @@
                                                 "type": "password",
                                                 "appPropertySupport": true
                                             },
-                                            "value": "=$property[\"Messaging.MM-TCE.Authentication_Key\"]"
+                                            "value": "=$property[\"Messaging.TCM.Authentication_Key\"]"
                                         },
                                         {
                                             "name": "timeout",
@@ -371,7 +354,7 @@
                                                 "description": "Timeout value in seconds",
                                                 "appPropertySupport": true
                                             },
-                                            "value": "=$property[\"Messaging.MM-TCE.Timeout_(in_seconds)\"]"
+                                            "value": "=$property[\"Messaging.TCM.Timeout_(in_seconds)\"]"
                                         },
                                         {
                                             "name": "autoReconnectAttempts",
@@ -382,7 +365,7 @@
                                                 "description": "Specifies the number of times the client attempts to automatically reconnect to the server following a loss of connection",
                                                 "appPropertySupport": true
                                             },
-                                            "value": "=$property[\"Messaging.MM-TCE.AutoReconnectAttempts\"]"
+                                            "value": "=$property[\"Messaging.TCM.AutoReconnectAttempts\"]"
                                         },
                                         {
                                             "name": "autoReconnectMaxDelay",
@@ -393,7 +376,7 @@
                                                 "description": "Determines the maximum delay between autoreconnect attempts",
                                                 "appPropertySupport": true
                                             },
-                                            "value": "=$property[\"Messaging.MM-TCE.AutoReconnectMaxDelay_(in_seconds)\"]"
+                                            "value": "=$property[\"Messaging.TCM.AutoReconnectMaxDelay_(in_seconds)\"]"
                                         }
                                     ],
                                     "outputs": [],
@@ -428,9 +411,11 @@
                                     "keyfield": "name",
                                     "iteratorAccumulate": false,
                                     "isValid": true,
-                                    "lastUpdatedTime": 1577966221916,
-                                    "user": "kys473iplvpnc5o5y4po5n7ad6zz6nln",
-                                    "connectorName": "MM-TCE",
+                                    "lastUpdatedTime": 1578684904410,
+                                    "createdTime": 1578684904410,
+                                    "user": "o4yg65xtp5plekzl4fwhaqvhbv2coekh",
+                                    "subscriptionId": "01DXXG1Y0P5RPVB4ZYJH69D05B",
+                                    "connectorName": "TCM",
                                     "connectorDescription": " "
                                 },
                                 "destination": "delivered",
@@ -447,7 +432,7 @@
                                     "message": {
                                         "type": "json",
                                         "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"properties\":{\"payload\":{\"type\":\"string\"}}}",
-                                        "fe_metadata": "{\n    \"payload\":\"\"\n}"
+                                        "fe_metadata": "{\n\t\"payload\":\"\"\n}"
                                     }
                                 }
                             }
@@ -475,32 +460,32 @@
     ],
     "properties": [
         {
-            "name": "Messaging.MM-TCE.Connection_URL",
+            "name": "Messaging.TCM.Connection_URL",
             "type": "string",
-            "value": "wss://eu.messaging.cloud.tibco.com/tcm/01C9S3V8D93KXEXKK1SD4C4C90/channel"
+            "value": "wss://01DXXG1Y0P5RPVB4ZYJH69D05B-apps.eu.messaging.cloud.tibco.com/channel"
         },
         {
-            "name": "Messaging.MM-TCE.Authentication_Key",
+            "name": "Messaging.TCM.Authentication_Key",
             "type": "string",
-            "value": "SECRET:cxHDuue0hPXcSGZ1aBP8sCZ4c/R5uleZsi7hxlyExvImO8cpMBwhqECM/T2ZI3Gs"
+            "value": "SECRET:pyPGYK6iBtjvBklxbaTkJdTQQAhyYMXZbcJAKzGsAmZfKPNzmoCMRzm6+T/clcoL"
         },
         {
-            "name": "Messaging.MM-TCE.Timeout_(in_seconds)",
+            "name": "Messaging.TCM.Timeout_(in_seconds)",
             "type": "float64",
             "value": 2
         },
         {
-            "name": "Messaging.MM-TCE.AutoReconnectAttempts",
+            "name": "Messaging.TCM.AutoReconnectAttempts",
             "type": "float64",
             "value": 5
         },
         {
-            "name": "Messaging.MM-TCE.AutoReconnectMaxDelay_(in_seconds)",
+            "name": "Messaging.TCM.AutoReconnectMaxDelay_(in_seconds)",
             "type": "float64",
             "value": 30
         }
     ],
     "connections": {},
     "contrib": "W3sicmVmIjoiZ2l0LnRpYmNvLmNvbS9naXQvcHJvZHVjdC9pcGFhcy93aS1wbHVnaW5zLmdpdC9jb250cmlidXRpb25zL01lc3NhZ2luZyIsInMzbG9jYXRpb24iOiJUaWJjby9NZXNzYWdpbmcifSx7InJlZiI6ImdpdC50aWJjby5jb20vZ2l0L3Byb2R1Y3QvaXBhYXMvd2ktY29udHJpYi5naXQvY29udHJpYnV0aW9ucy9HZW5lcmFsIiwiczNsb2NhdGlvbiI6IlRpYmNvL0dlbmVyYWwifV0=",
-    "fe_metadata": "UEsDBAoAAAAIALCTKlCrqSRGFQAAABMAAAAIAAAAYXBwLmpzb26rViopykxPTy1yy8kvL1ayio6tBQBQSwECFAAKAAAACACwkypQq6kkRhUAAAATAAAACAAAAAAAAAAAAAAAAAAAAAAAYXBwLmpzb25QSwUGAAAAAAEAAQA2AAAAOwAAAAAA"
+    "fe_metadata": "UEsDBAoAAAAIALNxLVCrqSRGFQAAABMAAAAIAAAAYXBwLmpzb26rViopykxPTy1yy8kvL1ayio6tBQBQSwECFAAKAAAACACzcS1Qq6kkRhUAAAATAAAACAAAAAAAAAAAAAAAAAAAAAAAYXBwLmpzb25QSwUGAAAAAAEAAQA2AAAAOwAAAAAA"
 }
