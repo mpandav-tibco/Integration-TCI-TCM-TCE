@@ -15,4 +15,7 @@
 3. [Building a Orchestration-based Saga using TIBCO Cloud™ Platform](doc/002.md)
 
 4. [Preparing for the deployment of the TIBCO Cloud Events Solution](doc/003.md)
-5. 
+
+5. [Build and Deploy Event-Driven Microservices](doc/004.md)
+
+6. [Test your Solution](dooc/005.md)
