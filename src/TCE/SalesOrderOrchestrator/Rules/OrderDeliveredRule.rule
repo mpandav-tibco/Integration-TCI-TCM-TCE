@@ -55,8 +55,10 @@ rule Rules.OrderDeliveredRule {
 
 		// Get Order Concept from Working Memory
 		Concepts.Order orderConcept = Instance.getByExtIdByUri(orderId,"/Concepts/Order");	
-		System.debugOut("#### ORDER STATE = " + orderConcept.state);
 		orderConcept.state = "COMPLETED";
+		
+		System.debugOut("#### ORDER STATE = " + orderConcept.state);
+
 		
 		
 		// Tidy up
