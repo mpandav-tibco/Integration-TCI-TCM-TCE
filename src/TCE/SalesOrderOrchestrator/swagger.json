@@ -9,7 +9,7 @@
     "basePath": "/",
     "tags": [
         {
-            "name": "/Channels/OrderSaga",
+            "name": "/Channels/Order/OrderDest",
             "description": ""
         }
     ],
@@ -18,10 +18,10 @@
         "http"
     ],
     "paths": {
-        "/Channels/OrderSaga/NewSaga": {
+        "/Channels/Order/OrderDest": {
             "post": {
                 "tags": [
-                    "/Channels/OrderSaga"
+                    "/Channels/Order/OrderDest"
                 ],
                 "summary": "Sales Order Orchestrator (Saga Pattern)",
                 "consumes": [
@@ -30,7 +30,7 @@
                 "produces": [
                     "application/json"
                 ],
-                "operationId": "Channels_Orders_newSaga",
+                "operationId": "Channels_Orders_OrderDest",
                 "parameters": [
                     {
                         "in": "query",
@@ -57,42 +57,64 @@
                                 "order": {
                                     "type": "object",
                                     "properties": {
+                                        "order_id": {
+                                            "type": "string",
+                                            "default": "000000124"
+                                        },
+                                        "customer_id": {
+                                            "type": "string",
+                                            "default": "abc123"
+                                        },
                                         "email": {
                                             "type": "string",
                                             "format": "email",
                                             "default": "bob.sugar@example.com"
                                         },
-                                        "send_receipt": {
-                                            "type": "boolean",
-                                            "default": true
-                                        },
-                                        "send_fulfillment_receipt": {
-                                            "type": "boolean",
-                                            "default": true
-                                        },
-                                        "line_items": {
+                                        "items": {
                                             "type": "array",
                                             "items": {
                                                 "type": "object",
                                                 "properties": {
-                                                    "title": {
+                                                    "item_name": {
                                                         "type": "string",
                                                         "default": "Gummy Bears"
                                                     },
                                                     "price": {
-                                                        "type": "integer",
-                                                        "default": 2
-                                                    },
-                                                    "grams": {
-                                                        "type": "string",
-                                                        "default": "250"
+                                                        "type": "number",
+                                                        "default": 2.00
                                                     },
                                                     "quantity": {
                                                         "type": "integer",
-                                                        "default": 1
+                                                        "default": 10
                                                     }
                                                 }
                                             }
+                                        },
+                                        "address" : {
+                                        	"type": "object",
+                                        	"properties": {
+                                                    "address1": {
+                                                        "type": "string",
+                                                        "default": "Flat 4"
+                                                    },   
+                                                    "address2": {
+                                                        "type": "string",
+                                                        "default": "103 Royal Oak Road"
+                                                    },
+                                                    "city": {
+                                                        "type": "string",
+                                                        "default": "Warwick"
+                                                    },                                                                                                                                      	
+                                                    "country": {
+                                                        "type": "string",
+                                                        "default": "United Kingdom"
+                                                    },  
+                                                    "postcode": {
+                                                        "type": "string",
+                                                        "default": "CV4 7ES"
+                                                    }                                                                                          	
+                                        	}
+                                        
                                         }
                                     }
                                 }
