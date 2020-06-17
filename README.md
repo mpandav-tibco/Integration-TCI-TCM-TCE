@@ -1,4 +1,4 @@
-# TIBCO Cloud Asynchronous APIs Workshop - Business Transactions
+# TIBCO Cloud Event Driven Architecture Workshop - Business Transactions
 
 **Note**: Before you start the labs, download the repo (**Clone or download** > **Download ZIP**), and unzip it to a local directory.
 
