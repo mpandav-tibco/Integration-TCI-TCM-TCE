@@ -1,4 +1,4 @@
-# TIBCO Cloud Event Driven Architecture Workshop - Business Transactions
+# Integation of TCI & TCE throuh TCM
 
 **Note**: Before you start the labs, download the repo (**Clone or download** > **Download ZIP**), and unzip it to a local directory.
 
